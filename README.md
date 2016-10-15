@@ -1,6 +1,7 @@
 # Minor-2016-Django
 
 Project Name : Cardboard
+
 Type : Web-App
 
 A college's Sem-V Minor Project made by the efforts of me and my partner Sanyam Batra who have worked as a full stack developer.
