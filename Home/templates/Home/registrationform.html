@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Signup{% endblock %}</title>
+    {% load staticfiles %}
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Lemon" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+    <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="{% static 'Home/welcome.css' %}" />
+</head>
+<body>
+<div class="container">
+    <div class="accheading">
+        <h3>Create a Cardboard Account</h3>
+    </div>
+    <form  action=" " method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {% include 'Home/form.template.html' %}
+        <div class="form-group">
+            <div class="subbutton">
+                <button type="submit" class="btn btn-success">Create New Account</button>
+            </div>
+        </div>
+    </form>
+     <div class="alreadyacc">
+        <h4>Already have an account?<a href="{% url 'Home:login' %}">Login....</a> </h4>
+     </div>
+</div>
+</body>

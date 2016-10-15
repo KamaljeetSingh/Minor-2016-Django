@@ -1,0 +1,37 @@
+{% load staticfiles %}
+<link rel="stylesheet" type="text/css" href="{% static 'Home/navbar.css' %}">
+<nav class="navbar navbar-default" id="navi">
+    <div class="container-fluid">
+       <div class="navbar-header">
+            <a class="navbar-brand" style="color: white" href="{% url 'cards:CardsProjects_All' %}">Cardboard</a>
+        </div>
+        <ul class="nav navbar-nav">
+            <li>
+                <div class="boardshead">
+                    <a href="#" >Boards</a>
+                </div>
+
+            </li>
+            <li>
+                <div class="boardadd">
+                    <a href="#">+</a>
+                </div>
+            </li>
+            <li>
+                <div class="userdet">
+                    <a href="#" style="font-size: 1.5em; letter-spacing: -1.5px;"><span class="glyphicon glyphicon-user" id="123"  style="color: white;font-size: 1em; "></span> {{ request.user.first_name }} {{ request.user.last_name }}</a>
+                </div>
+            </li>
+            <li>
+                <div class="info">
+                    <a href="#"><span class="glyphicon glyphicon-info-sign" style="color:white"></span></a>
+                </div>
+            </li>
+            <li>
+                 <div class="notific">
+                    <a href="#"><span class="glyphicon glyphicon-bell" style="color:white"></span></a>
+                </div>
+            </li>
+        </ul>
+    </div>
+ </nav>

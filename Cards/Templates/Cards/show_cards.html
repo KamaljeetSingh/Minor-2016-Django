@@ -1,0 +1,25 @@
+{% extends 'Cards/base.html' %}
+{% block body %}
+{% load staticfiles %}
+<title>
+    Cardboard
+</title>
+    {% include 'Cards/navigation.html' %}
+
+    <link rel="stylesheet" type="text/css" href="{% static 'Cards/cards.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'Cards/sticky.css' %}">
+
+
+<div class="container-fluid">
+<h1>Cards</h1>
+<div class="well" id="well_id">
+<ul class="cards_display">
+    {% for x in cards %}
+        {% include 'Cards/Card_Modals.html' %}
+        {% include 'Cards/Cards_Sticky.html' %}
+    {% endfor %}
+
+</ul>
+</div>
+</div>
+{% endblock %}
