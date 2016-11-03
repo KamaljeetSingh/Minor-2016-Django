@@ -17,9 +17,12 @@
                     <a href="#">+</a>
                 </div>
             </li>
-            <li>
+            <li class="dropdown">
                 <div class="userdet">
-                    <a href="#" style="font-size: 1.5em; letter-spacing: -1.5px;"><span class="glyphicon glyphicon-user" id="123"  style="color: white;font-size: 1em; "></span> {{ request.user.first_name }} {{ request.user.last_name }}</a>
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" style="font-size: 1.5em; letter-spacing: -1.5px;"><span class="glyphicon glyphicon-user" id="123"  style="color: white;font-size: 1em; "></span> {{ request.user.first_name }} {{ request.user.last_name }}</a>
+                <ul class="dropdown-menu">
+                    <li><a href="{% url 'Home:logout' %}">Logout</a></li>
+                </ul>
                 </div>
             </li>
             <li>

@@ -9,8 +9,26 @@ from .models import *
 # Create your views here.
 
 
-def welcome(request):
-    return render(request, 'Home/welcome.html', {})
+class LoginFormView(View):
+    form_class = LoginForm
+    template_name = 'Home/index.html'
+
+    def get(self, request):
+        form = self.form_class(None)
+        return render(request, self.template_name,{})
+
+    def post(self, request):
+        username = request.POST['username']
+        password = request.POST['password']
+
+        user = authenticate(username=username, password=password)
+
+        if user is not None:
+
+            if user.is_active:
+                login(request, user)
+                return redirect('cards:CardsProjects_All')
+        return HttpResponse('<p>bhag</p>')
 
 
 class UserFormView(View):
@@ -41,29 +59,6 @@ class UserFormView(View):
                     login(request, user)
                     return redirect('cards:CardsProjects_All')
         return render(request, self.template_name, {'form': form})
-
-
-class LoginFormView(View):
-    form_class = LoginForm
-    template_name = 'Home/loginform.html'
-
-    def get(self, request):
-        form = self.form_class(None)
-        return render(request, self.template_name, {'form': form})
-
-    def post(self, request):
-        username = request.POST['username']
-        password = request.POST['password']
-
-        user = authenticate(username=username, password=password)
-
-        if user is not None:
-
-            if user.is_active:
-                login(request, user)
-                return redirect('cards:CardsProjects_All')
-        return HttpResponse('<p>bhag</p>')
-
 
 def logout_view(request):
     logout(request)

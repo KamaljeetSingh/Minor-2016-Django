@@ -1,3 +1,10 @@
+@import 'https://fonts.googleapis.com/css?family=Roboto+Slab';
+@import 'https://fonts.googleapis.com/css?family=Pacifico';
+body
+{
+    font-family: 'Roboto Slab', serif;
+}
+
 .appinfo
 {
     width: 100%;
@@ -13,7 +20,6 @@ img
 .appname h1
 {
    position: absolute;
-   font-family: 'Permanent Marker', cursive;
    text-align: center;
    left:150px;
    font-size:70px;
@@ -26,7 +32,6 @@ img
 }
 .appwork h3
 {
-    font-family: 'Shrikhand', cursive;
     position: absolute;
     top:100px;
     letter-spacing:2px;
@@ -99,7 +104,7 @@ img
     top:65px;
     left:220px;
     font-size: 25px;
-    font-family: 'Open Sans', sans-serif;;
+
 }
 .tag2
 {
@@ -107,7 +112,7 @@ img
     top:85px;
     left:220px;
     font-size: 25px;
-    font-family: 'Open Sans', sans-serif;;
+
 }
 .tag3
 {
@@ -115,7 +120,7 @@ img
     top:95px;
     left:220px;
     font-size: 25px;
-    font-family: 'Open Sans', sans-serif;;
+
 
 }
 .tag4
@@ -124,7 +129,7 @@ img
     top:105px;
     left:220px;
     font-size: 25px;
-    font-family: 'Open Sans', sans-serif;;
+
 
 }
 .tag5
@@ -133,7 +138,6 @@ img
     top:115px;
     left:220px;
     font-size: 25px;
-    font-family: 'Open Sans', sans-serif;;
 
 }
 .fff{
