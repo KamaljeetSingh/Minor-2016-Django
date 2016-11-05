@@ -1,4 +1,4 @@
-from django.shortcuts import render , render_to_response
+from django.shortcuts import render , render_to_response,redirect
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
@@ -15,84 +15,102 @@ from .forms import *
 from django.views.generic.edit import CreateView,DeleteView
 import json
 from django.core.files.uploadedfile import TemporaryUploadedFile
+from Home.models import *
+import random
+import string
 # Create your views here.
 
 
 def CardsProjects_All(request):
-    cards = Cards.objects.all().order_by('-card_date')[:2]
-    if not cards:
-        flag = 0
+
+    if request.user.is_authenticated():
+        current_user = Usersinfo.objects.get(no=request.user.pk)
+        cards = current_user.cards.all().order_by('-card_date')[:2]
+
+        if not cards:
+            flag = 0
+        else:
+            flag = 1
+
+        if request.method == "POST":
+            title = request.POST.get('textbox')
+            desc = request.POST.get('descp')
+            datanew = Data()
+            datanew.type = 0
+            datanew.data = str(title)
+            datanew.save()
+            datanew1 = Data()
+            datanew1.type = 6
+            datanew1.data = str(desc)
+            datanew1.save()
+            cardnew1 = Cards()
+            cardnew1.save()
+            cardnew1.database.add(datanew)
+            cardnew1.database.add(datanew1)
+            cardnew1.card_date = datetime.now()
+            cardnew1.key = ''.join([random.choice(string.ascii_letters + string.digits) for n in range(10)])
+            cardnew1.save()
+            flag = 1
+            current_user = Usersinfo.objects.get(no=request.user.pk)
+            current_user.cards.add(cardnew1)
+            current_user.save()
+            cards = current_user.cards.all().order_by('-card_date')[:2]
+
+        return render(request, 'Cards/HomePage.html' , {'cards' : cards, 'flag':flag})
     else:
-        flag = 1
+        return redirect('Home:login')
 
-    if request.method == "POST":
-        title = request.POST.get('textbox')
-        desc = request.POST.get('descp')
-        datanew = Data()
-        datanew.type = 0
-        datanew.data = str(title)
-        datanew.save()
-        datanew1 = Data()
-        datanew1.type = 6
-        datanew1.data = str(desc)
-        datanew1.save()
-        cardnew1 = Cards()
-        cardnew1.save()
-        cardnew1.database.add(datanew)
-        cardnew1.database.add(datanew1)
-        cardnew1.card_date = datetime.now()
-        cardnew1.save()
-        flag = 1
-        cards = Cards.objects.all().order_by('-card_date')[:2]
-
-    return render(request, 'Cards/HomePage.html' , {'cards' : cards, 'flag':flag})
 
 
 def Show_Card(request):
 
-    if 'add_list' in request.POST:
-        title = request.POST.get('titlebox')
-        card_id = request.POST.get('card_id')
-        checklist = Checklist()
-        checklist.title = title
-        checklist.list_date = datetime.now()
-        checklist.save()
-        items = ChecklistItems()
-        items.Check_title = checklist
-        items.save()
-        datanew = Data()
-        datanew.type = 3
-        datanew.save()
-        datanew.checklist.add(items)
-        datanew.save()
-        card = Cards.objects.get(pk=card_id)
-        card.database.add(datanew)
-        card.save()
+    if request.user.is_authenticated():
 
-    if 'save_list_item' in request.POST:
-        out = 0
-        which_list = request.POST.get('checkneed')
-        item_name = request.POST.get('attr')
-        data = Data.objects.all()
-        checklist_main = Checklist.objects.get(title=which_list)
-        for x in data:
-            for z in x.checklist.all():
-                if z.Check_title == checklist_main:
-                    out = 1
+        if 'add_list' in request.POST:
+            title = request.POST.get('titlebox')
+            card_id = request.POST.get('card_id')
+            checklist = Checklist()
+            checklist.title = title
+            checklist.list_date = datetime.now()
+            checklist.save()
+            items = ChecklistItems()
+            items.Check_title = checklist
+            items.save()
+            datanew = Data()
+            datanew.type = 3
+            datanew.save()
+            datanew.checklist.add(items)
+            datanew.save()
+            card = Cards.objects.get(pk=card_id)
+            card.database.add(datanew)
+            card.save()
+
+        if 'save_list_item' in request.POST:
+            out = 0
+            which_list = request.POST.get('checkneed')
+            item_name = request.POST.get('attr')
+            data = Data.objects.all()
+            checklist_main = Checklist.objects.get(title=which_list)
+            for x in data:
+                for z in x.checklist.all():
+                    if z.Check_title == checklist_main:
+                        out = 1
+                        break
+                if out == 1:
+                    item_new = ChecklistItems()
+                    item_new.item = item_name
+                    item_new.Check_title = checklist_main
+                    item_new.done = False
+                    item_new.save()
+                    x.checklist.add(item_new)
+                    x.save()
                     break
-            if out == 1:
-                item_new = ChecklistItems()
-                item_new.item = item_name
-                item_new.Check_title = checklist_main
-                item_new.done = False
-                item_new.save()
-                x.checklist.add(item_new)
-                x.save()
-                break
-
-    cards = Cards.objects.all().order_by('-card_date')
-    return render(request, 'Cards/show_cards.html', {'cards': cards})
-
+                    
+        current_user = Usersinfo.objects.get(no=request.user.pk)
+        cards = current_user.cards.all().order_by('-card_date')
+        return render(request, 'Cards/show_cards.html', {'cards': cards})
+    else:
+        return redirect('Home:login')
 
 def Store_post(request):
     if request.is_ajax():

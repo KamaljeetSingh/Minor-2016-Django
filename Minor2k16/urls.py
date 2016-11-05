@@ -1,15 +1,19 @@
-from django.conf.urls import url,include
+import allauth
+from django.conf.urls import url, include
 from django.contrib import admin
 from django.conf import settings
 from django.conf.urls.static import static
 from rest_framework.urlpatterns import format_suffix_patterns
 from Cards import views
+from Home import views as home_views
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^home/', include('Cards.urls')),
     url(r'^api/', views.Cardlist.as_view()),
+    url(r'^api_users', home_views.Usersinfolist.as_view()),
     url(r'^Home/',include('Home.urls')),
+    url(r'^accounts/', include('allauth.urls')),
 ]
 
 if settings.DEBUG:

@@ -41,9 +41,10 @@
                         <h1>Login</h1>
                         <form  action="" method="post" enctype="multipart/form-data">
                             {% csrf_token %}
-                        <input type="text" placeholder="Username" name="username" autocomplete="off">
-                        <input type="password" placeholder="Password" name="password" autocomplete="off">
+                        <input type="text" placeholder="Username" name="username" autocomplete="off" required>
+                        <input type="password" placeholder="Password" name="password" autocomplete="off" required>
                         <button type="submit">Login</button>
+                        <a href="/accounts/google/login/" id="google">Login with google</a>
                         </form>
                         </div>
 

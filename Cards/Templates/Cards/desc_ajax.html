@@ -5,7 +5,7 @@
                 {% csrf_token %}
                 <input type="text" name="card_id" id="card_id{{ x.id }}" value="{{ x.pk }}" hidden>
                 <input type="text" name="data_id" id="data_id{{ x.id }}" value="{{ y.pk }}" hidden>
-                <input type="text" class="form-control" rows="2" style="width:100%; word-wrap: break-word;" id="highlight{{ x.pk }}" name="descpedit" value="{{ y.data }}" >
+                <input type="text" class="form-control" rows="2" style="width:100%; word-wrap: break-word;" id="highlight{{ x.pk }}" name="descpedit" value="{{ y.data }}" autocomplete="off">
                 <button type="submit" class="btn btn-success" name="save_about" id="save_me">Save</button>
             </form>
      {% endif %}

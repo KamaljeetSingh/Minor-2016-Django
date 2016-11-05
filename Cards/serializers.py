@@ -6,5 +6,5 @@ class CardsSerializers(serializers.ModelSerializer):
 
     class Meta:
         model = Cards
-        fields = ['id', 'database']
+        fields = ['id', 'key', 'database']
         depth = 2

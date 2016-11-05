@@ -1,12 +1,13 @@
 from django.db import models
 from datetime import datetime
 from django.core.urlresolvers import reverse
+import uuid
 
 # Create your models here.
 '''
 title = 0
 desc = 6
-note = 1
+comment = 1
 image = 2
 checklist = 3
 audionote = 4
@@ -16,7 +17,7 @@ file = 5
 
 class Checklist(models.Model):
     title = models.CharField(max_length=500)
-    list_date = models.DateField(default=datetime.now())
+    #list_date = models.DateField(default=datetime.now())
 
     def __str__(self):
         return str(self.title)
@@ -49,13 +50,17 @@ class Data(models.Model):
 
 
 class Cards(models.Model):
-    #uuid =
     database = models.ManyToManyField(Data, related_name='databs')
     card_date = models.DateField(default=datetime.now())
-    #indivdual -- default
-    #backcolor
+    key = models.CharField(max_length=50)
 
     def __str__(self):
         return str(self.pk)
 
 
+'''class Boards(models.Model):
+    cards_data = models.ManyToManyField(Cards, related_name='cards_data')
+    board_date = models.DateField(default=datetime.now())
+
+    def __str__(self):
+        return str(self.pk)'''

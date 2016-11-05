@@ -5,7 +5,10 @@ from .forms import UserForm, LoginForm
 from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponse
 from .models import *
-
+from rest_framework.views import APIView
+import json
+from Home.serializers import UsersinfoSerializers
+from rest_framework.response import Response
 # Create your views here.
 
 
@@ -67,3 +70,15 @@ def logout_view(request):
 
 def board(request):
     return render(request, 'Home/base.html', {})
+
+
+'''JSON'''
+class Usersinfolist(APIView):
+
+    def get(self, request):
+        users = Usersinfo.objects.all()
+        serializer = UsersinfoSerializers(users, many=True)
+        return Response(serializer.data)
+
+    def post(self):
+        pass
