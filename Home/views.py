@@ -3,14 +3,19 @@ from django.shortcuts import render,  redirect
 from django.views.generic import View
 from .forms import UserForm, LoginForm
 from django.contrib.auth import authenticate, login, logout
-from django.http import HttpResponse
+from django.http import HttpResponse, StreamingHttpResponse
 from .models import *
 from rest_framework.views import APIView
 import json
 from Home.serializers import UsersinfoSerializers
 from rest_framework.response import Response
+from django.http import Http404
+from rest_framework import status
 # Create your views here.
-
+'''
+json loads -> returns an object from a string representing a json object.
+json dumps -> returns a string representing a json object from an object.
+'''
 
 class LoginFormView(View):
     form_class = LoginForm
@@ -80,5 +85,8 @@ class Usersinfolist(APIView):
         serializer = UsersinfoSerializers(users, many=True)
         return Response(serializer.data)
 
-    def post(self):
-        pass
+    def post(self, request):
+        received_data = json.dumps(request.data)
+        json_data = json.loads(received_data)
+        return HttpResponse(json.dumps(json_data['no']['email']))
+

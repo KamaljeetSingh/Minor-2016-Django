@@ -16,4 +16,3 @@ class Usersinfo(models.Model):
         return str(self.no)
 
 
-

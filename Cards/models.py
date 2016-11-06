@@ -58,6 +58,13 @@ class Cards(models.Model):
         return str(self.pk)
 
 
+class Status(models.Model):
+    username = models.CharField(max_length=100)
+    card_id = models.CharField(max_length=100)
+
+    def __str__(self):
+        return str(self.username)
+
 '''class Boards(models.Model):
     cards_data = models.ManyToManyField(Cards, related_name='cards_data')
     board_date = models.DateField(default=datetime.now())
