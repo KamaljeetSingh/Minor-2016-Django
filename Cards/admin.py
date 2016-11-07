@@ -9,3 +9,5 @@ admin.site.register(Cards)
 admin.site.register(Checklist)
 admin.site.register(ChecklistItems)
 admin.site.register(Usersinfo)
+admin.site.register(Card_id)
+

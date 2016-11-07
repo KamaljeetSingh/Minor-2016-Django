@@ -28,6 +28,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'Cards.apps.CardsConfig',
     'Home.apps.HomeConfig',
+    'Boards.apps.BoardsConfig',
     'rest_framework',
     'django.contrib.sites',
     'allauth',

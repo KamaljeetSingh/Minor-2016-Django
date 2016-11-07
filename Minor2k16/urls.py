@@ -12,6 +12,7 @@ urlpatterns = [
     url(r'^home/', include('Cards.urls')),
     url(r'^api/', views.Cardlist.as_view()),
     url(r'^api_users', home_views.Usersinfolist.as_view()),
+    url(r'^api_status', views.Statuslist.as_view()),
     url(r'^Home/',include('Home.urls')),
     url(r'^accounts/', include('allauth.urls')),
 ]

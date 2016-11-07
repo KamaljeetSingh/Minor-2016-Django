@@ -58,6 +58,14 @@ class Cards(models.Model):
         return str(self.pk)
 
 
+class Card_id(models.Model):
+    key = models.CharField(max_length=50)
+
+    def __str__(self):
+        return str(self.key)
+
+
+
 class Status(models.Model):
     username = models.CharField(max_length=100)
     card_id = models.CharField(max_length=100)

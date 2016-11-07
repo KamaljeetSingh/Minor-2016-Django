@@ -2,7 +2,7 @@ from django.shortcuts import render , render_to_response,redirect
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from .serializers import CardsSerializers
+from .serializers import *
 from rest_framework.decorators import api_view
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
@@ -198,3 +198,12 @@ class Cardlist(APIView):
     def post(self):
         pass
 
+class Statuslist(APIView):
+
+    def get(self, request):
+        status = Status.objects.all()
+        serializer = StatusSerializers(status, many=True)
+        return Response(serializer.data)
+
+    def post(self):
+        pass

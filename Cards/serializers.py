@@ -8,3 +8,11 @@ class CardsSerializers(serializers.ModelSerializer):
         model = Cards
         fields = ['id', 'key', 'database']
         depth = 2
+
+
+class StatusSerializers(serializers.ModelSerializer):
+
+    class Meta:
+        model = Status
+        fields = ['username', 'card_id']
+        depth = 2
