@@ -14,6 +14,7 @@ from django.core.urlresolvers import reverse_lazy
 from .forms import *
 from django.views.generic.edit import CreateView,DeleteView
 import json
+from Home.serializers import UsersinfoSerializers
 from django.core.files.uploadedfile import TemporaryUploadedFile
 from Home.models import *
 import random
@@ -49,8 +50,17 @@ def CardsProjects_All(request):
             cardnew1.database.add(datanew1)
             cardnew1.card_date = datetime.now()
             cardnew1.key = ''.join([random.choice(string.ascii_letters + string.digits) for n in range(10)])
+            cardnew1.change = 0
             cardnew1.save()
+            ob = Card_id()
+            ob.key = cardnew1.key
+            ob.change = cardnew1.change
+            ob.save()
             flag = 1
+            card_title = Cards_title()
+            card_title.c_key = ob
+            card_title.name = str(title)
+            card_title.save()
             current_user = Usersinfo.objects.get(no=request.user.pk)
             current_user.cards.add(cardnew1)
             current_user.save()
@@ -148,9 +158,8 @@ def Store_post(request):
                 card = Cards.objects.get(pk=card_id)
                 card.database.add(datanew)
                 card.save()
-
-        card = Cards.objects.get(id=card_id)
-        return render_to_response('Cards/activity_ajax.html', {'x': card})
+            card = Cards.objects.get(id=card_id)
+            return render_to_response('Cards/activity_ajax.html', {'x': card})
 
 
 
@@ -190,13 +199,18 @@ class DeleteCard(DeleteView):
 '''JSON'''
 class Cardlist(APIView):
 
-    def get(self, request):
-        cards = Cards.objects.all()
+    def get(self, request, key):
+        u = User.objects.get(username=key)
+        us = Usersinfo.objects.get(no=u.pk)
+        cards = us.cards.all()
         serializer = CardsSerializers(cards, many=True)
         return Response(serializer.data)
 
-    def post(self):
-        pass
+    def post(self, request):
+        x = json.dumps(request.data)
+        data = json.loads(x)
+        return HttpResponse(json.dumps(data))
+
 
 class Statuslist(APIView):
 
@@ -207,3 +221,7 @@ class Statuslist(APIView):
 
     def post(self):
         pass
+
+
+
+

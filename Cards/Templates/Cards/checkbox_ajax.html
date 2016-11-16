@@ -155,7 +155,7 @@
 
                  <div style="width: 35%;">
                  {% for z in y.checklist.all|slice:":1" %}
-                     <form action="" method="post"  name="item_form" id="add_item{{y.pk }}">
+                     <form action="{% url 'cards:show_card' %}" method="post"  name="item_form" id="add_item{{y.pk }}">
                         {% csrf_token %}
                         <input type="text" name="checkneed" value="{{ z.Check_title }}" hidden>
                         <input type="text" id="itemfill{{ y.pk }}" class="form-control" name="attr">

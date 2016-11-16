@@ -36,6 +36,7 @@ INSTALLED_APPS = [
     'allauth.socialaccount',
     'allauth.socialaccount.providers.google',
     'allauth.socialaccount.providers.facebook',
+    'alpha',
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -133,5 +134,5 @@ AUTHENTICATION_BACKENDS = (
 )
 
 SITE_ID = 1
-
+LOGIN_URL = '/login/'
 LOGIN_REDIRECT_URL = '/home/'

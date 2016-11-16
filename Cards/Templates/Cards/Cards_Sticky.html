@@ -1,24 +1,3 @@
-<li>
-
-        <a href="#popUpWindow{{ x.pk }}" name="check_user" data-toggle="modal" style="text-decoration: none;">
-            <div id="sum{{ x.pk }}" style="margin-top: 20%;">
-            {% for y in x.database.all %}
-                {% if y.type == 0 %}
-                    <h2>{{ y.data }}</h2>
-                {% elif y.type == 6 %}
-                    <p>{{ y.data }}</p>
-                {% endif %}
-                {% endfor %}
-            <p style="text-align: right; color: dimgray;">{{ x.card_date }}</p>
-            </div>
-        </a>
-
-</li>
-
-
-
-
-
         <div class="modal fade" role="dialog" id="popUpWindow{{ x.pk }}">
         <div class="modal-dialog" style="width: 50%; ">
         <div class="modal-content" style="background-color: whitesmoke;">
@@ -30,9 +9,7 @@
             {% if y.type == 0 %}
                 <div class="heading">
                 <h4 class="modal-title" style="height: 40%; width:100%; top:0%;">
-                    <div class="banner">
 
-                    </div>
                     <div class="text-head">
                     <b>{{ y.data }}</b>
                     </div>
@@ -66,7 +43,7 @@
         </div>
 
         <div id="collapse1{{ x.pk }}" class="panel-collapse collapse" style="padding: 5%;">
-            <form action="" method="post">
+            <form action="{% url 'cards:show_card' %}" method="post">
             {% csrf_token %}
         <div class="panel-body" style="width:210px;">Title</div>
             <div class="form-group">
@@ -83,7 +60,7 @@
         <div class="post-box" style="margin-bottom: 11%;">
            <div class="post"><i class="fa fa-commenting" aria-hidden="true"></i><b> Post-Box</b></div>
             <div class="post-form" style="width: 100%;margin-top: 8%; margin-left: 5%;">
-            <form id="post-form{{ x.id }}" enctype="multipart/form-data">
+            <form id="post-form{{ x.id }}" href="{% url 'cards:store_post' %}" enctype="multipart/form-data">
                 {% csrf_token %}
                 <input type="text" name="card_id" id="c_id{{ x.id }}" value="{{ x.pk }}" hidden>
                 <div class="comment-frame" >

@@ -7,7 +7,7 @@
     <link rel="stylesheet" type="text/css" href="{% static 'Cards/sticky.css' %}">
     {% include 'Cards/navigation.html' %}
 <div class="container">
-         <h2>Your Personal Cards</h2>
+        <h2>Your Personal Cards</h2>
         <div class="well" style="background: white;">
         <div class="container" style="width: inherit">
         <h4>Recently Made</h4>
@@ -15,6 +15,21 @@
             {% if flag == 1 %}
 <ul class="cards_display">
                {% for x in cards %}
+                    <li>
+            <a href="#popUpWindow{{ x.pk }}" name="check_user" data-toggle="modal" style="text-decoration: none;">
+            <div id="sum{{ x.pk }}" style="margin-top: 20%;">
+            {% for y in x.database.all %}
+                {% if y.type == 0 %}
+                    <h2>{{ y.data }}</h2>
+                {% elif y.type == 6 %}
+                    <p>{{ y.data }}</p>
+                {% endif %}
+                {% endfor %}
+            <p style="text-align: right; color: dimgray;">{{ x.card_date }}</p>
+            </div>
+        </a>
+
+        </li>
                {% include 'Cards/Card_Modals.html' %}
                {% include 'Cards/Cards_Sticky.html' %}
             {% endfor %}

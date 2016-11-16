@@ -2,6 +2,7 @@ from django.db import models
 from Cards.models import *
 # Create your models here.
 
+
 class ListofCards(models.Model):
     title = models.CharField(max_length=100)
     key = models.CharField(max_length=100)

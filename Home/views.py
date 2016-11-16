@@ -22,6 +22,8 @@ class LoginFormView(View):
     template_name = 'Home/index.html'
 
     def get(self, request):
+        if request.user.is_authenticated():
+            return redirect('cards:CardsProjects_All')
         form = self.form_class(None)
         return render(request, self.template_name,{})
 

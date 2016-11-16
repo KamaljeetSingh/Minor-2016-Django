@@ -53,6 +53,7 @@ class Cards(models.Model):
     database = models.ManyToManyField(Data, related_name='databs')
     card_date = models.DateField(default=datetime.now())
     key = models.CharField(max_length=50)
+    change = models.IntegerField(default=0)
 
     def __str__(self):
         return str(self.pk)
@@ -60,10 +61,19 @@ class Cards(models.Model):
 
 class Card_id(models.Model):
     key = models.CharField(max_length=50)
+    change = models.IntegerField(default=0)
+
 
     def __str__(self):
         return str(self.key)
 
+
+class Cards_title(models.Model):
+    c_key = models.ForeignKey(Card_id, on_delete=models.CASCADE)
+    name = models.CharField(max_length=100)
+
+    def __str__(self):
+        return str(self.name)
 
 
 class Status(models.Model):
