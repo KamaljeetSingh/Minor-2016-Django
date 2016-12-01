@@ -9,8 +9,11 @@ from rest_framework.views import APIView
 import json
 from Home.serializers import UsersinfoSerializers
 from rest_framework.response import Response
+from Cards.models import *
 from django.http import Http404
 from rest_framework import status
+import logging
+
 # Create your views here.
 '''
 json loads -> returns an object from a string representing a json object.
@@ -63,6 +66,12 @@ class UserFormView(View):
             us = User.objects.get(pk=user.pk)
             u.no = us
             u.save()
+            st = Status()
+            st.save()
+            st.username = username
+            c_id = Card_id.objects.get(key="manobhav")
+            st.card_id.add(c_id)
+            st.save()
             user = authenticate(username=username, password=password)
             if user is not None:
                 if user.is_active:
@@ -82,13 +91,48 @@ def board(request):
 '''JSON'''
 class Usersinfolist(APIView):
 
-    def get(self, request):
-        users = Usersinfo.objects.all()
-        serializer = UsersinfoSerializers(users, many=True)
+    def get(self, request, user):
+        u = User.objects.get(username=user)
+        user = Usersinfo.objects.get(no=u.pk)
+        b = user.boards.all()
+        serializer = UsersinfoSerializers(b, many=True)
         return Response(serializer.data)
 
-    def post(self, request):
-        received_data = json.dumps(request.data)
+    def post(self, request, user):
+        username = request.POST['name']
+        '''received_data = json.dumps(request.data)
         json_data = json.loads(received_data)
-        return HttpResponse(json.dumps(json_data['no']['email']))
+        return HttpResponse(json.dumps(json_data['uuid']))
+        '''
+        logging.warning(username)
+        return HttpResponse("okay manobhav.")
+
+
+class requests(APIView):
+    def get(self, request):
+        return HttpResponse("mai sab kaam phle karta hu")
+
+    def post(self, request):
+        json_data = request.POST['name']
+        flag = request.POST['flag']
+        user = request.POST['user']
+        json_data_new = json.loads(json_data)
+        if str(flag) == "insert":                                    #insert
+            logging.warning(json_data_new)
+            for x in json_data_new:
+                logging.warning(x['key'])
+                card_id = Card_id.objects.get(key=x['key'])
+                st = Status.objects.get(username=user)
+                st.card_id.add(card_id)
+                st.save()
+
+        if str(flag) == "delete":                                   #delete
+            for x in json_data_new:
+                st = Status.objects.get(username=user)
+                card = Card_id.objects.get(key=x['key'])
+                st.card_id.remove(card)
+                st.save()
+
+        return HttpResponse("okay manobhav.")
+
 

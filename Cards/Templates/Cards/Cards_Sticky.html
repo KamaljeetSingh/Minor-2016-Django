@@ -43,12 +43,12 @@
         </div>
 
         <div id="collapse1{{ x.pk }}" class="panel-collapse collapse" style="padding: 5%;">
-            <form action="{% url 'cards:show_card' %}" method="post">
+            <form id="add_check_ajax{{ x.pk }}" href="{% url 'cards:add_checklist' %}" method="post">
             {% csrf_token %}
         <div class="panel-body" style="width:210px;">Title</div>
             <div class="form-group">
-            <input type="text" class="form-control" name="titlebox"></div>
-            <input type="text" name="card_id" value="{{ x.pk }}" hidden>
+            <input type="text" class="form-control" name="titlebox" id="title_box_list{{ x.pk }}"></div>
+            <input type="text" name="card_id" value="{{ x.pk }}" id="card_id_list{{ x.pk }}" hidden>
             <button type="submit" class="btn btn-success" name="add_list">Add Checklist</button>
             </form>
         </div>
@@ -89,7 +89,7 @@
         </div>
 
             <!-- Checklits -->
-            <div>
+            <div id="whole_checklist{{ x.pk }}">
             {% include 'Cards/checkbox_ajax.html' %}
             </div>
 

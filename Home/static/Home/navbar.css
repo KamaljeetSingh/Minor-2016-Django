@@ -149,3 +149,7 @@ body
 {
     opacity: 1.0;
 }
+
+.dropdown:hover {
+    color: inherit;
+}

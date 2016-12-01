@@ -71,12 +71,18 @@ def CardsProjects_All(request):
         return redirect('Home:login')
 
 
-
-def Show_Card(request):
-
+def Show_cards(request):
     if request.user.is_authenticated():
+        current_user = Usersinfo.objects.get(no=request.user.pk)
+        cards = current_user.cards.all().order_by('-card_date')
+        return render(request, 'Cards/show_cards.html', {'cards': cards})
+    else:
+        return redirect('Home:login')
 
-        if 'add_list' in request.POST:
+
+def Add_Checklist(request):
+    if request.is_ajax():
+        if request.user.is_authenticated():
             title = request.POST.get('titlebox')
             card_id = request.POST.get('card_id')
             checklist = Checklist()
@@ -93,12 +99,43 @@ def Show_Card(request):
             datanew.save()
             card = Cards.objects.get(pk=card_id)
             card.database.add(datanew)
+            card.change += 1
             card.save()
 
-        if 'save_list_item' in request.POST:
+            '''if 'save_list_item' in request.POST:
+                out = 0
+                which_list = request.POST.get('checkneed')
+                item_name = request.POST.get('attr')
+                data = Data.objects.all()
+                checklist_main = Checklist.objects.get(title=which_list)
+                for x in data:
+                    for z in x.checklist.all():
+                        if z.Check_title == checklist_main:
+                            out = 1
+                            break
+                    if out == 1:
+                        item_new = ChecklistItems()
+                        item_new.item = item_name
+                        item_new.Check_title = checklist_main
+                        item_new.done = False
+                        item_new.save()
+                        x.checklist.add(item_new)
+                        x.save()
+                        break'''
+
+            card = Cards.objects.get(pk=card_id)
+            return render_to_response('Cards/checkbox_ajax.html', {'x': card})
+        else:
+            return redirect('Home:login')
+
+
+def Add_Checklist_Item(request):
+    if request.is_ajax():
+        if request.user.is_authenticated():
             out = 0
             which_list = request.POST.get('checkneed')
-            item_name = request.POST.get('attr')
+            item_name = request.POST.get('attrr')
+            card_id = request.POST.get('card_id')
             data = Data.objects.all()
             checklist_main = Checklist.objects.get(title=which_list)
             for x in data:
@@ -115,12 +152,12 @@ def Show_Card(request):
                     x.checklist.add(item_new)
                     x.save()
                     break
-                    
-        current_user = Usersinfo.objects.get(no=request.user.pk)
-        cards = current_user.cards.all().order_by('-card_date')
-        return render(request, 'Cards/show_cards.html', {'cards': cards})
-    else:
-        return redirect('Home:login')
+            card = Cards.objects.get(pk=card_id)
+            card.change += 1
+            card.save()
+            return render_to_response('Cards/checkbox_ajax.html', {'x': card})
+        else:
+            return redirect('Home:login')
 
 def Store_post(request):
     if request.is_ajax():
@@ -132,9 +169,11 @@ def Store_post(request):
                 datanew = Data()
                 datanew.type = 1
                 datanew.data = com
+                datanew.user_name = request.user.first_name
                 datanew.save()
                 card = Cards.objects.get(id=card_id)
                 card.database.add(datanew)
+                card.change += 1
                 card.save()
             if request.FILES.get('upload_photo') is not None and request.FILES.get('upload_photo') is not "":
                 card_attach = CardsAttach()
@@ -143,9 +182,11 @@ def Store_post(request):
                 datanew = Data()
                 datanew.type = 2
                 datanew.data = str(card_attach.photo)
+                datanew.user_name = request.user.first_name
                 datanew.save()
                 card = Cards.objects.get(pk=card_id)
                 card.database.add(datanew)
+                card.change += 1
                 card.save()
             if request.FILES.get('upload_attach') is not None and request.FILES.get('upload_attach') is not "":
                 card_attach = CardsAttach()
@@ -154,9 +195,11 @@ def Store_post(request):
                 datanew = Data()
                 datanew.type = 5
                 datanew.data = str(card_attach.photo)
+                datanew.user_name = request.user.first_name
                 datanew.save()
                 card = Cards.objects.get(pk=card_id)
                 card.database.add(datanew)
+                card.change += 1
                 card.save()
             card = Cards.objects.get(id=card_id)
             return render_to_response('Cards/activity_ajax.html', {'x': card})
@@ -172,6 +215,8 @@ def Desc_post(request):
         datanew.data = about
         datanew.save()
         card = Cards.objects.get(id=card_id)
+        card.change += 1
+        card.save()
         return render_to_response('Cards/desc_ajax.html', {'x': card})
 
 
@@ -188,6 +233,8 @@ def add_item(request):
             ob.done = 0
         ob.save()
         card = Cards.objects.get(pk=x_key)
+        card.change += 1
+        card.save()
         return render_to_response('Cards/checkbox_ajax.html', {'x': card})
 
 
@@ -214,14 +261,27 @@ class Cardlist(APIView):
 
 class Statuslist(APIView):
 
-    def get(self, request):
-        status = Status.objects.all()
+    def get(self, request,  key):
+        u = User.objects.get(username=key)
+        status = Status.objects.filter(username=u.username)
         serializer = StatusSerializers(status, many=True)
         return Response(serializer.data)
 
     def post(self):
         pass
 
+
+class Board_Cardlist(APIView):
+
+    def get(self, request, ckey):
+        card = Cards.objects.get(key=ckey)
+        serializer = CardsSerializers(card)
+        return Response(serializer.data)
+
+    def post(self, request):
+        x = json.dumps(request.data)
+        data = json.loads(x)
+        return HttpResponse(json.dumps(data))
 
 
 

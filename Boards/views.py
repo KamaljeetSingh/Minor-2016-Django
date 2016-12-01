@@ -1,6 +1,10 @@
 import random
 import string
-from django.shortcuts import render,redirect
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from django.shortcuts import render,redirect,HttpResponse
+from django.views.generic.edit import DeleteView
+from django.core.urlresolvers import reverse_lazy
 from .models import *
 from Home.models import *
 from Cards.models import *
@@ -45,6 +49,20 @@ def list_add(request, idd):
             boards.save()
             boards.listInsideProjects.add(list_card)
             boards.save()
+        if 'add_mem' in request.POST:
+            flag = 0
+            mem_name = request.POST.get('member_box')
+            us = User.objects.all()
+            for x in us:
+                if x.username == mem_name:
+                    ob = Usersinfo.objects.get(no=x.pk)
+                    b = Boards.objects.get(uuid=idd)
+                    ob.boards.add(b)
+                    ob.save()
+                    flag = 1
+                    break
+            if flag == 0:
+                return HttpResponse('User not found')
         if 'add_card' in request.POST:
             list_id = request.POST.get('list_id')
             title = request.POST.get('card_name')
@@ -80,9 +98,17 @@ def list_add(request, idd):
         ll = b.listInsideProjects.all()
         names = Cards_title.objects.all()
         cards = Cards.objects.all()
-        return render(request, 'Boards/addlist.html', {'obj': ll,  'board_id': idd, 'names':names, 'cards':cards ,'board': b })
+        return render(request, 'Boards/addlist.html', {'obj': ll,  'board_id': idd, 'names':names, 'cards':cards ,'board': b, 'nav':1 })
     else:
         redirect('Home:login')
 
 
+class DeleteBoard(DeleteView):
+    model = Boards
+    success_url = reverse_lazy('boards:boards_add')
+
+
+class DeleteList(DeleteView):
+    model = ListofCards
+    success_url = reverse_lazy('boards:boards_add')
 

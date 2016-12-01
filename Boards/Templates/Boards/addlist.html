@@ -16,6 +16,7 @@
         <div class="cardboard">
         <p class="list_title">
             <b>{{ q.title }}</b>
+
         </p>
         {% for p in q.listofcards.all %}
                 {% for x in cards %}
@@ -25,6 +26,7 @@
                 {% for z in names %}
                     {% if z.c_key == p %}
                         {{ z.name }}
+
                     {% endif %}
                 {% endfor %}
                 </div>
@@ -59,7 +61,12 @@
         </div>
             </div>
         </div>
+        <form action="{% url 'boards:delete_list' q.pk %}" method="post">
+                {% csrf_token %}
+                <button class="btn btn-default" title="Delete List" style="background-color: transparent; border-style: none; color: lightcoral;"><span class="glyphicon glyphicon-trash"></span></button>
+            </form>
         </div>
+
         {% endfor %}
 
     <div class="panel-group" style="display: inline-block; width: 15em; margin: 1%; padding: 0.3%;">

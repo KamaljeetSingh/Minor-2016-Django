@@ -25,6 +25,31 @@
             });
             });
 
+            $(document).ready(function () {
+                     $(document).on('submit','#add_item{{y.pk }}',function (e) {
+                         e.preventDefault();
+                         alert('continue?{{ y.pk }}');
+                         $.ajax({
+                             type:"post",
+                             url:$(this).attr("href"),
+                             data:{
+                                 checkneed:$('#list_title{{ y.pk }}').val(),
+                                 attrr:$('#itemfill{{ y.pk }}').val(),
+                                 card_id:$('#card_id_listt{{ x.id }}').val(),
+                                 csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val()
+                             },
+                             success:function (data) {
+                                 $('#whole_checklist{{ x.pk }}').html(data);
+                                 alert('Done item');
+                             },
+                             error:function(exception){alert('Exception:'+exception);}
+
+                         });
+                         e.preventDefault();
+                     });
+                  });
+
+
 
              </script>
              {% if y.type == 3 %}
@@ -155,10 +180,12 @@
 
                  <div style="width: 35%;">
                  {% for z in y.checklist.all|slice:":1" %}
-                     <form action="{% url 'cards:show_card' %}" method="post"  name="item_form" id="add_item{{y.pk }}">
+
+                     <form action=" " href="{% url 'cards:add_checklist_item' %}" method="post"  name="item_form" id="add_item{{y.pk }}">
                         {% csrf_token %}
-                        <input type="text" name="checkneed" value="{{ z.Check_title }}" hidden>
-                        <input type="text" id="itemfill{{ y.pk }}" class="form-control" name="attr">
+                        <input type="text" name="checkneed" value="{{ z.Check_title }}" id="list_title{{ y.pk }}" hidden>
+                        <input type="text" id="itemfill{{ y.pk }}" class="form-control" name="attrr">
+                        <input type="text" name="card_id" value="{{ x.pk }}" id="card_id_listt{{ x.pk }}" hidden>
                         <button type="submit" class="btn btn-success" name="save_list_item">Save</button>
                      </form>
                  {% endfor %}
