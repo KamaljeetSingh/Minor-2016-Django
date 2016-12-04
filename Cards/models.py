@@ -35,6 +35,7 @@ class ChecklistItems(models.Model):
 class CardsAttach(models.Model):
     photo = models.FileField(null=True)
     attachment = models.FileField(null=True)
+    #image=models.ImageField(null=True)
 
     def __str__(self):
         return str(self.id)

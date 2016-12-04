@@ -13,7 +13,12 @@ from Cards.models import *
 from django.http import Http404
 from rest_framework import status
 import logging
+import os
+import urllib.request
+from Minor2k16.settings import BASE_DIR,MEDIA_ROOT
 
+from django.core import files
+from django.core.files import File
 # Create your views here.
 '''
 json loads -> returns an object from a string representing a json object.
@@ -41,7 +46,7 @@ class LoginFormView(View):
             if user.is_active:
                 login(request, user)
                 return redirect('cards:CardsProjects_All')
-        return HttpResponse('<p>bhag</p>')
+        return HttpResponse('<p>Sorry ! Your Username and Password dont match.</p>')
 
 
 class UserFormView(View):
@@ -113,26 +118,122 @@ class requests(APIView):
         return HttpResponse("mai sab kaam phle karta hu")
 
     def post(self, request):
-        json_data = request.POST['name']
-        flag = request.POST['flag']
-        user = request.POST['user']
-        json_data_new = json.loads(json_data)
-        if str(flag) == "insert":                                    #insert
-            logging.warning(json_data_new)
+        usern = request.POST['username']
+        json_data = request.POST['insertstatus']
+        json_data_del = request.POST['deletestatus']
+        json_cards = request.POST['insertcards']
+        json_d_cards = request.POST['deletecards']
+
+        if json_data is not '':                               #insert
+            json_data_new = json.loads(json_data)
+            logging.warning("insert mujme")
             for x in json_data_new:
                 logging.warning(x['key'])
                 card_id = Card_id.objects.get(key=x['key'])
-                st = Status.objects.get(username=user)
+                st = Status.objects.get(username=usern)
                 st.card_id.add(card_id)
                 st.save()
 
-        if str(flag) == "delete":                                   #delete
-            for x in json_data_new:
-                st = Status.objects.get(username=user)
-                card = Card_id.objects.get(key=x['key'])
-                st.card_id.remove(card)
+        if json_data_del is not '':                            #delete
+            json_data_new_del = json.loads(json_data_del)
+            logging.warning("delete mujme")
+            for x in json_data_new_del:
+                if x['key'] != 'manobhav':
+                    st = Status.objects.get(username=usern)
+                    card = Card_id.objects.get(key=x['key'])
+                    st.card_id.remove(card)
+                    st.save()
+
+        if json_d_cards is not '':  # delete cards from admin
+            json_cards_delete = json.loads(json_d_cards)
+            logging.warning(json_cards_delete)
+            logging.warning("deleteee")
+            for x in json_cards_delete:
+                if x['key'] != 'manobhav':
+                    st = Status.objects.get(username=usern)
+                    card = Card_id.objects.get(key=x['key'])
+                    st.card_id.remove(card)
+                    st.save()
+                    card = Cards.objects.get(key=x['key'])
+                    card.delete()
+
+        if json_cards is not '':                                 #make new cards from admin
+            json_cards_insert = json.loads(json_cards)
+            logging.warning("insert")
+            logging.warning(json_cards_insert)
+            for x in json_cards_insert:
+                cardnew = Cards()
+                u = User.objects.get(username=usern)
+                uinfo = Usersinfo.objects.get(no=u)
+                cardnew.save()
+                cardnew.key = x['key']
+                cardnew.change = int(x['change'])
+                cardnew.save()
+                logging.warning(x['key'])
+                logging.warning(x['change'])
+                uinfo.cards.add(cardnew)
+                uinfo.save()
+                ob = Card_id()
+                ob.key = cardnew.key
+                ob.save()
+                card_id = Card_id.objects.get(key=x['key'])
+                st = Status.objects.get(username=usern)
+                st.card_id.add(card_id)
                 st.save()
+                for y in x['database']:
+                    logging.warning(y['type'])
+
+                    if int(y['type']) == 0:                 #title
+                        datanew = Data()
+                        datanew.type = 0
+                        datanew.data = y['data']
+                        datanew.save()
+                        cardnew.database.add(datanew)
+                        cardnew.save()
+
+                    elif int(y['type']) == 1:                 #description
+                        datanew = Data()
+                        datanew.type = 1
+                        datanew.data = y['data']
+                        datanew.save()
+                        cardnew.database.add(datanew)
+                        cardnew.save()
+
+                    elif int(y['type']) == 2:                  #image
+                        datanew = Data()
+                        datanew.type = 2
+                        datanew.data = "./" + y['data']
+                        datanew.save()
+                        cardnew.database.add(datanew)
+                        cardnew.save()
+
+                    elif int(y['type']) == 3:                  #checklist
+                        json_check = json.loads(y['data'])
+                        logging.warning(json_check)
+                        c = Checklist()
+                        c.title = "Default"
+                        c.save()
+                        data = Data()
+                        data.type = 3
+                        data.save()
+                        for xc in json_check:
+                            ci = ChecklistItems()
+                            ci.Check_title = c
+                            ci.item = xc['item']
+                            ci.done = bool(xc['done'])
+                            ci.save()
+                            data.checklist.add(ci)
+                            data.save()
+                            cardnew.database.add(data)
+                            cardnew.save()
 
         return HttpResponse("okay manobhav.")
 
+
+class Photo(APIView):
+    def post(self, request):
+        card_attach = CardsAttach()
+        card_attach.photo = request.FILES['upload_photo']
+        card_attach.save()
+        return HttpResponse("yes file done")
 

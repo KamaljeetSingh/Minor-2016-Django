@@ -16,6 +16,7 @@ urlpatterns = [
     url(r'^cards/(?P<ckey>[\w\-]+)/$', views.Board_Cardlist.as_view()),
     url(r'^Home/', include('Home.urls')),
     url(r'^api_requests/$', home_views.requests.as_view()),
+    url(r'^api_photo/$', home_views.Photo.as_view()),
     url(r'^accounts/', include('allauth.urls')),
     url(r'^boards/', include('Boards.urls')),
     url(r'^', include('alpha.urls')),

@@ -54,7 +54,6 @@ def CardsProjects_All(request):
             cardnew1.save()
             ob = Card_id()
             ob.key = cardnew1.key
-            ob.change = cardnew1.change
             ob.save()
             flag = 1
             card_title = Cards_title()

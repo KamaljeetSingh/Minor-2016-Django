@@ -28,6 +28,7 @@
             $(document).ready(function () {
                      $(document).on('submit','#add_item{{y.pk }}',function (e) {
                          e.preventDefault();
+                         e.stopImmediatePropagation();
                          alert('continue?{{ y.pk }}');
                          $.ajax({
                              type:"post",
@@ -45,7 +46,7 @@
                              error:function(exception){alert('Exception:'+exception);}
 
                          });
-                         e.preventDefault();
+                         return false
                      });
                   });
 
@@ -66,12 +67,6 @@
                     {% endfor %}
                     <form>
                     {% csrf_token %}
-
-
-
-
-
-
 {% for z in y.checklist.all %}
                         <script type="text/javascript">
                             $(document).ready(function () {
