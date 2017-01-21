@@ -19,6 +19,8 @@ from Minor2k16.settings import BASE_DIR,MEDIA_ROOT
 
 from django.core import files
 from django.core.files import File
+import string
+import random
 # Create your views here.
 '''
 json loads -> returns an object from a string representing a json object.
@@ -211,7 +213,7 @@ class requests(APIView):
                         json_check = json.loads(y['data'])
                         logging.warning(json_check)
                         c = Checklist()
-                        c.title = "Default"
+                        c.title = ''.join([random.choice(string.ascii_letters + string.digits) for n in range(5)])
                         c.save()
                         data = Data()
                         data.type = 3
@@ -237,3 +239,13 @@ class Photo(APIView):
         card_attach.save()
         return HttpResponse("yes file done")
 
+class User_verify(APIView):
+    def post(self, request):
+        user_name = request.POST['email']
+        pass_word = request.POST['password']
+        user = authenticate(username=user_name, password=pass_word)
+
+        if user is not None:
+            return HttpResponse('success')
+
+        return HttpResponse('<p>Sorry ! Your Username and Password dont match.</p>')

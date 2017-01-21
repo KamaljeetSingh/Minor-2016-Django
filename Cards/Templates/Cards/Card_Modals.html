@@ -65,7 +65,7 @@
             $(document).on('submit','#pass{{ x.pk }}',function(e){
             e.preventDefault();
                 $('#pass{{ x.pk }}').hide();
-                alert("Continue?{{ x.id }}");
+
             $.ajax({
                 type:"post",
                 url:$(this).attr("href"),
@@ -78,7 +78,7 @@
                 success: function(data) {
 
                     $('#about-co{{ x.id }}').html(data);
-                    alert("Good");
+
                     $('#pass{{ x.pk }}').hide();
                     $('.mylink{{ x.pk }}').show();
 
@@ -94,7 +94,7 @@
             $(document).ready(function () {
                $(document).on('submit','#add_check_ajax{{ x.pk }}',function (e) {
                    e.preventDefault();
-                   alert("continue?{{ x.pk }}");
+
                    $.ajax({
                        type:"post",
                        url:$(this).attr("href"),
@@ -105,7 +105,7 @@
                        },
                         success: function(data) {
                             $('#whole_checklist{{ x.pk }}').html(data);
-                            alert("Done checklist");
+
 
 
                        },
@@ -121,7 +121,7 @@
             $(document).ready(function() {
             $(document).on('submit','#post-form{{ x.id }}',function(e){
                 e.preventDefault();
-                alert("Continue?{{ x.id }}");
+
 
             var formData = new FormData($(this).get(0));
 
@@ -139,7 +139,7 @@
                     $('#upload1{{ x.id }}').val("");
                     $('#uploadFile{{ x.id }}').val("");
                     $('#uploadFile1{{ x.id }}').val("");
-                    alert("DoneFile");
+
                 },
                 error: function(data){
                     console.log("error");

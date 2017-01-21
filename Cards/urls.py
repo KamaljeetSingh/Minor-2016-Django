@@ -12,5 +12,7 @@ urlpatterns = [
     url(r"^showcard/(?P<pk>[0-9]+)/delete/$", views.DeleteCard.as_view() , name='delete_card'),
     url(r"^store-desc/$", views.Desc_post , name='desc_post'),
     url(r"^showcard/itemadd/$", views.add_item , name='add_item'),
+    url(r"^itemadd/$", views.add_item , name='add_item'),
+    url(r"^showcard/itemadd/$", views.add_item , name='add_item'),
     url(r"^store-post/$", views.Store_post, name='store_post'),
 ]

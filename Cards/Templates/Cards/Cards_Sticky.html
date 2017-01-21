@@ -37,8 +37,8 @@
             <div class="panel-group" style="position:absolute;left:38em;top:53px;">
         <div class="panel panel-default">
         <div class="panel-heading">
-        <h4 class="panel-title" style="width:80px;">
-        <a data-toggle="collapse" href="#collapse1{{ x.pk }}" style="text-decoration: none;">Checklist</a>
+        <h4 class="panel-title" style="width:auto;">
+        <a data-toggle="collapse" href="#collapse1{{ x.pk }}" style="text-decoration: none;"><strong>Add Checklist</strong></a>
         </h4>
         </div>
 
@@ -75,7 +75,9 @@
                                 <span class="glyphicon glyphicon-paperclip" id="pfa"  aria-hidden="true" title="Attach File" style="font-size: 18px;"></span>
                                 <input type="file" name="upload_attach" value="none" id="upload1{{ x.id }}" style="display:none;">
                             </label>
-                            <input id="uploadFile{{ x.id }}" placeholder="Choose File" disabled="disabled" >
+                            <br>
+                            <br>
+                            <input id="uploadFile{{ x.id }}" placeholder="Choose File" disabled="disabled" style="margin-left: 17%;">
                         <input id="uploadFile1{{ x.id }}" placeholder="Choose File" disabled="disabled" >
                         </div>
 

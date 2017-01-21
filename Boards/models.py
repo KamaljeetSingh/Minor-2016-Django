@@ -16,7 +16,7 @@ class Boards(models.Model):
     uuid = models.CharField(max_length=50)
     title = models.CharField(max_length=100)
     listInsideProjects = models.ManyToManyField(ListofCards, related_name='listinside')
-
+    shared = models.IntegerField(default=0)
     def __str__(self):
         return (self.title)
 

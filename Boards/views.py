@@ -58,7 +58,10 @@ def list_add(request, idd):
                     ob = Usersinfo.objects.get(no=x.pk)
                     b = Boards.objects.get(uuid=idd)
                     ob.boards.add(b)
+                    b.shared += 1
+                    b.save()
                     ob.save()
+
                     flag = 1
                     break
             if flag == 0:

@@ -29,7 +29,7 @@
                      $(document).on('submit','#add_item{{y.pk }}',function (e) {
                          e.preventDefault();
                          e.stopImmediatePropagation();
-                         alert('continue?{{ y.pk }}');
+
                          $.ajax({
                              type:"post",
                              url:$(this).attr("href"),
@@ -41,7 +41,7 @@
                              },
                              success:function (data) {
                                  $('#whole_checklist{{ x.pk }}').html(data);
-                                 alert('Done item');
+
                              },
                              error:function(exception){alert('Exception:'+exception);}
 
@@ -103,6 +103,7 @@
 
             var boo;
 
+
            if($(this).is(':checked'))
            {
 
@@ -120,7 +121,7 @@
             $.ajax({
 
                 type:'POST',
-                url:'itemadd/',
+                url:$(this).attr("href"),
                 data:{
                     zkeyval:$('#zkey{{ z.pk }}').val(),
                     val:boo,
@@ -129,7 +130,7 @@
                     csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val()
                 },
                 success:function(data) {
-                    //alert("haha");
+
 
 
 
@@ -146,7 +147,8 @@
                             <input type="text" id="zkey{{ z.pk }}" value="{{ z.pk }}" hidden/>
                             <input type="text" id="xkey{{ z.pk }}" value="{{ x.pk }}" hidden/>
                             <input type="text" id="ykey{{ z.pk }}" value="{{ y.pk }}" hidden/>
-                            <div class="vastu" id="vastu{{ z.pk }}"><input type="checkbox" id="checkk{{ z.pk }}" name="checkajax{{ y.pk }}" value="{{ z.done }}" /> {{ z.item }}</div>
+                            <div class="vastu" id="vastu{{ z.pk }}"><input type="checkbox" href="{% url 'cards:add_item' %}" id="checkk{{ z.pk }}" name="checkajax{{ y.pk }}" value="{{ z.done }}" /> {{ z.item }}</div>
+
 
                         {% endif %}
 {% endfor %}
